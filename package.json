@@ -1,0 +1,13 @@
+{
+  "name": "core-values-video-wall",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Above & Beyond core values video campaign: upload, spin-to-win, testimonial wall.",
+  "scripts": {
+    "dev": "node dev-server.js"
+  },
+  "dependencies": {
+    "googleapis": "^140.0.1",
+    "resend": "^4.0.1"
+  }
+}

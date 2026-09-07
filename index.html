@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video and Win! | Above & Beyond ABA Therapy</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <img src="assets/brand/logo.png" alt="Above & Beyond ABA Therapy" class="topbar-logo">
+    <a href="#wall" class="topbar-link">See the wall →</a>
+  </div>
+</div>
+
+<!-- ===================== HERO (spin-to-win + the whole win-then-record flow) ===================== -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow">Above &amp; Beyond Core Values</p>
+      <h1>We want YOU on camera.</h1>
+      <p class="hero-sub">Tell us, in your own words, what makes this a great place to work. Record a short video answering one question below. Every video wins a prize, guaranteed.</p>
+      <div id="status-pills" class="status-pills" hidden></div>
+    </div>
+    <div class="hero-spin">
+      <span class="sticker sticker-sungold sticker-float-1">You in?</span>
+      <div class="widget-card" id="spin-card">
+        <p class="widget-eyebrow">Step 1</p>
+        <h2 id="spin-title">Spin to win!</h2>
+        <p class="card-note" id="spin-note">Everybody wins something good. Spin now, then record your video to claim it.</p>
+        <canvas id="wheel-canvas" width="240" height="240"></canvas>
+        <div id="spin-prize-reveal" class="prize-reveal" hidden></div>
+        <button type="button" class="btn" id="spin-btn">Spin now</button>
+        <button type="button" class="btn" id="spin-continue-btn" hidden>Record your video to claim your prize</button>
+      </div>
+      <span class="sticker sticker-sky sticker-float-2">2 min, tops!</span>
+
+      <div class="widget-card" id="question-picker-card" hidden>
+        <p class="widget-eyebrow">Step 2</p>
+        <h2>Pick your question</h2>
+        <p class="card-note">Answer up to 4. More videos, more prizes.</p>
+        <div class="question-grid" id="question-grid"></div>
+      </div>
+
+      <div class="widget-card" id="upload-card" hidden>
+        <p class="widget-eyebrow">Step 3</p>
+        <h2>Lights, camera, go!</h2>
+        <div class="selected-question" id="selected-question-text"></div>
+        <p class="sample-ideas" id="sample-ideas"></p>
+
+        <ul class="quick-tips">
+          <li>Go <strong>horizontal</strong>. Phone sideways, not up and down.</li>
+          <li>Repeat the question first, in your own words.</li>
+          <li>Keep it short. Your gut reaction beats a rehearsed speech.</li>
+        </ul>
+
+        <form class="upload-form" id="upload-form">
+
+          <input type="file" id="video-file" accept="video/*" capture="environment" hidden>
+          <button type="button" class="record-btn" id="record-btn">
+            <span class="record-icon">🎥</span>
+            <span>Record or upload your video</span>
+          </button>
+
+          <div id="video-chosen" class="video-chosen" hidden>
+            <img id="thumb-preview" class="thumb-preview" alt="Video thumbnail preview">
+            <button type="button" class="btn secondary small" id="retake-btn">Choose a different video</button>
+          </div>
+
+          <div id="details-fields" hidden>
+            <label for="field-name">Your name</label>
+            <input type="text" id="field-name">
+
+            <label for="field-title">Job title</label>
+            <input type="text" id="field-title">
+
+            <label for="field-email">Email</label>
+            <input type="email" id="field-email">
+
+            <div class="progress-bar" id="progress-bar" hidden><div id="progress-fill"></div></div>
+            <div class="form-error" id="form-error" hidden></div>
+
+            <button type="submit" class="btn" id="submit-btn">Upload &amp; claim your prize</button>
+          </div>
+
+          <button type="button" class="btn secondary" id="cancel-btn">Back</button>
+        </form>
+
+        <div id="submit-success" hidden>
+          <div class="prize-reveal" id="submit-success-text"></div>
+          <p class="card-note" id="submit-success-note"></p>
+          <button type="button" class="btn" id="submit-success-continue-btn">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== HOW IT WORKS ===================== -->
+<section class="how-strip">
+  <div class="wrap">
+    <span class="sticker sticker-sungold sticker-inline">Easy peasy</span>
+    <div class="how-grid">
+      <div class="how-item">
+        <span class="how-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2" transform="rotate(0 12 12)"></rect><circle cx="18" cy="12" r="1"></circle></svg></span>
+        <span class="how-num">01</span>
+        <p>Go <strong>horizontal</strong>. Turn your phone sideways, like you're shooting a movie, not a text.</p>
+      </div>
+      <div class="how-item">
+        <span class="how-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></span>
+        <span class="how-num">02</span>
+        <p>Repeat the question first, in your own words. That's how we know what you're answering.</p>
+      </div>
+      <div class="how-item">
+        <span class="how-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="14" rx="2"></rect><path d="M2 9h20"></path><path d="M6 6 8 3M11 6l2-3M16 6l2-3"></path></svg></span>
+        <span class="how-num">03</span>
+        <p>One question, one video. Don't try to answer all four in a single breath.</p>
+      </div>
+      <div class="how-item">
+        <span class="how-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2.5"></path><path d="M9 2h6"></path></svg></span>
+        <span class="how-num">04</span>
+        <p>Keep it short and real. Your gut reaction beats a rehearsed speech, every time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TESTIMONIAL WALL ===================== -->
+<section id="wall" class="wall-section">
+  <div class="wrap">
+    <p class="eyebrow eyebrow-light">The wall of fame</p>
+    <h2 class="section-title">See who's already hit record</h2>
+    <p class="section-sub">Every teammate who's recorded their story so far. Tap a card to watch.</p>
+    <div class="wall-grid" id="wall-grid"></div>
+    <p class="wall-empty" id="wall-empty" hidden>Nobody's hit record yet. Be the first!</p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <img src="assets/brand/logo.png" alt="Above & Beyond ABA Therapy">
+  <p>Above &amp; Beyond ABA Therapy: Core Values Video Campaign</p>
+  <span class="sticker sticker-sky sticker-inline">care to soar</span>
+</footer>
+
+<!-- ===================== LIGHTBOX ===================== -->
+<div class="lightbox-backdrop" id="lightbox" hidden>
+  <div>
+    <div class="lightbox-box" id="lightbox-box"></div>
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+</div>
+
+<script src="js/wheel.js"></script>
+<script src="js/upload.js"></script>
+<script src="js/wall.js"></script>
+<script src="js/app.js"></script>
+<script src="js/cursor-trail.js"></script>
+<script src="js/scroll-trail.js"></script>
+</body>
+</html>
