@@ -1,15 +1,25 @@
 const Wall = (() => {
   async function load() {
-    const grid = document.getElementById('wall-grid');
+    const track = document.getElementById('wall-track');
     const empty = document.getElementById('wall-empty');
     try {
       const res = await fetch('/api/wall');
       const { entries } = await res.json();
-      grid.innerHTML = '';
+      track.innerHTML = '';
       empty.hidden = entries.length > 0;
-      entries.forEach((entry) => grid.appendChild(renderCard(entry)));
+      track.parentElement.hidden = entries.length === 0;
+
+      if (entries.length > 0) {
+        // Render the set twice back to back so the CSS scroll animation can
+        // loop seamlessly from the end of the first copy into the second.
+        [...entries, ...entries].forEach((entry) => track.appendChild(renderCard(entry)));
+        const singleSetWidth = track.scrollWidth / 2;
+        track.style.setProperty('--wall-scroll-distance', `-${singleSetWidth}px`);
+        const duration = Math.max(20, entries.length * 6);
+        track.style.setProperty('--wall-scroll-duration', `${duration}s`);
+      }
     } catch (err) {
-      grid.innerHTML = '';
+      track.innerHTML = '';
       empty.hidden = false;
       empty.textContent = 'Could not load the wall right now. Try again shortly.';
     }
