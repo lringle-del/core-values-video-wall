@@ -75,7 +75,7 @@ body {
 .hero {
   background: var(--vanilla);
   color: var(--ink);
-  padding: 40px 20px;
+  padding: 56px 20px;
   position: relative; overflow: hidden;
 }
 .hero-stars { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
@@ -88,8 +88,8 @@ body {
   display: grid; grid-template-columns: 1fr; gap: 32px; align-items: start;
 }
 @media (min-width: 860px) {
-  .hero { padding: 56px 24px; }
-  .hero-inner { grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; }
+  .hero { padding: 88px 32px; }
+  .hero-inner { grid-template-columns: 1.05fr .95fr; gap: 72px; align-items: center; }
   .hero-spin { position: sticky; top: 24px; }
 }
 .hero-spin { position: relative; }
