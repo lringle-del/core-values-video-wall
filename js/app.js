@@ -38,6 +38,14 @@ function markAnswered(id) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(answered));
 }
 
+function daysLeftText(deadlineISO) {
+  const msLeft = new Date(deadlineISO).getTime() - Date.now();
+  const daysLeft = Math.ceil(msLeft / (1000 * 60 * 60 * 24));
+  if (daysLeft <= 0) return 'Last day!';
+  if (daysLeft === 1) return '1 day left';
+  return `${daysLeft} days left`;
+}
+
 // ---------------- status ----------------
 async function loadStatus() {
   try {
@@ -53,12 +61,10 @@ function renderStatusPills() {
   const pills = document.getElementById('status-pills');
   pills.hidden = false;
   if (campaignStatus.open) {
-    const deadlineTxt = campaignStatus.deadlineISO
-      ? `Ends ${new Date(campaignStatus.deadlineISO).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}`
-      : '';
+    const deadlineTxt = campaignStatus.deadlineISO ? daysLeftText(campaignStatus.deadlineISO) : '';
     pills.innerHTML = `
       <span class="pill"><strong>${campaignStatus.spotsLeft ?? '...'}</strong> of ${campaignStatus.cap ?? 150} spots left</span>
-      ${deadlineTxt ? `<span class="pill">${deadlineTxt}</span>` : ''}
+      ${deadlineTxt ? `<span class="pill pill-countdown"><strong>${deadlineTxt}</strong></span>` : ''}
     `;
   } else {
     pills.innerHTML = `<span class="pill pill-closed">All spots claimed. Testimonials still welcome</span>`;
