@@ -299,6 +299,7 @@ function showSubmitSuccess(result) {
   document.getElementById('submit-success').hidden = false;
   const textEl = document.getElementById('submit-success-text');
   const noteEl = document.getElementById('submit-success-note');
+  const continueBtn = document.getElementById('submit-success-continue-btn');
   if (result.isTestimonialOnly) {
     textEl.textContent = 'Your story is on the wall!';
     noteEl.textContent = 'Prizes for this round are claimed, but we loved hearing from you.';
@@ -306,6 +307,9 @@ function showSubmitSuccess(result) {
     textEl.textContent = result.prize;
     noteEl.textContent = 'Claimed! A confirmation email is on its way to you.';
   }
+  continueBtn.textContent = getAnswered().length >= QUESTIONS.length
+    ? 'See the wall'
+    : 'Spin again & record another video';
 }
 
 document.getElementById('submit-success-continue-btn').addEventListener('click', () => {
