@@ -13,15 +13,19 @@ module.exports = async (req, res) => {
   }
 
   try {
-    // The 150 cap is per PERSON, not per video — someone already in the
-    // sheet keeps getting spins for their remaining videos even if new
-    // people are now locked out.
+    // Only 150 PEOPLE total, not 150 videos — someone already in the sheet
+    // keeps submitting their remaining videos (up to 4) even after the cap
+    // fills for new people. Once closed, new submissions are rejected
+    // outright — every accepted video guarantees a prize, no exceptions.
     const existingEmails = await getParticipantEmails();
     const normalizedEmail = email.toLowerCase();
     const isExistingParticipant = existingEmails.map((e) => (e || '').toLowerCase()).includes(normalizedEmail);
     const uniqueParticipantCount = new Set(existingEmails.map((e) => (e || '').toLowerCase())).size;
     const eligible = canSpin({ uniqueParticipantCount, isExistingParticipant });
-    const isTestimonialOnly = !eligible;
+
+    if (!eligible) {
+      return res.status(403).json({ closed: true, error: 'All 150 spots are filled and submissions are closed.' });
+    }
 
     let thumbnailFileId = null;
     if (thumbnailBase64) {
@@ -35,12 +39,8 @@ module.exports = async (req, res) => {
     // Honor the prize already shown to them at spin time (before they
     // recorded anything) so what they see matches what they get. Only
     // rolls a fresh one if none was passed along.
-    let prizeIndex = null;
-    let prize = null;
-    if (!isTestimonialOnly) {
-      prizeIndex = Number.isInteger(shownPrizeIndex) && PRIZES[shownPrizeIndex] ? shownPrizeIndex : pickPrizeIndex();
-      prize = PRIZES[prizeIndex].label;
-    }
+    const prizeIndex = Number.isInteger(shownPrizeIndex) && PRIZES[shownPrizeIndex] ? shownPrizeIndex : pickPrizeIndex();
+    const prize = PRIZES[prizeIndex].label;
 
     await appendSubmission([
       new Date().toISOString(),
@@ -50,16 +50,16 @@ module.exports = async (req, res) => {
       question,
       driveFileId,
       thumbnailFileId || '',
-      prize || '',
-      isTestimonialOnly ? 'yes' : 'no',
+      prize,
+      'no',
     ]);
 
     await Promise.all([
-      !isTestimonialOnly ? sendConfirmationEmail({ toEmail: email, name, question, prize }) : Promise.resolve(),
-      sendTeamNotification({ name, title, question, prize, isTestimonialOnly }),
+      sendConfirmationEmail({ toEmail: email, name, question, prize }),
+      sendTeamNotification({ name, title, question, prize, isTestimonialOnly: false }),
     ]);
 
-    res.status(200).json({ isTestimonialOnly, prize, prizeIndex, prizes: PRIZES });
+    res.status(200).json({ prize, prizeIndex, prizes: PRIZES });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to finalize submission.' });

@@ -55,6 +55,20 @@ async function loadStatus() {
     campaignStatus = { open: true, spotsLeft: null, deadlineISO: null };
   }
   renderStatusPills();
+  renderCountdownBar();
+}
+
+function renderCountdownBar() {
+  const bar = document.getElementById('countdown-bar');
+  bar.hidden = false;
+  if (!campaignStatus.open) {
+    bar.classList.add('closing');
+    bar.textContent = 'This campaign is now closed. Thanks to everyone who recorded a video!';
+    return;
+  }
+  bar.classList.remove('closing');
+  const dayTxt = campaignStatus.deadlineISO ? daysLeftText(campaignStatus.deadlineISO) : null;
+  bar.innerHTML = `Only <strong>150 spots</strong> total, ${campaignStatus.spotsLeft ?? '...'} left` + (dayTxt ? ` &middot; <strong>${dayTxt}</strong> to record your video` : '');
 }
 
 function renderStatusPills() {
@@ -67,7 +81,7 @@ function renderStatusPills() {
       ${deadlineTxt ? `<span class="pill pill-countdown"><strong>${deadlineTxt}</strong></span>` : ''}
     `;
   } else {
-    pills.innerHTML = `<span class="pill pill-closed">All spots claimed. Testimonials still welcome</span>`;
+    pills.innerHTML = `<span class="pill pill-closed">All 150 spots are filled. Submissions are closed.</span>`;
   }
 }
 
@@ -137,17 +151,16 @@ document.getElementById('spin-btn').addEventListener('click', async () => {
     const data = await res.json();
 
     if (!data.open) {
-      pendingSpin = { isTestimonialOnly: true };
+      pendingSpin = null;
       canvas.hidden = true;
       spinBtn.hidden = true;
-      spinTitle.textContent = 'All prizes are claimed';
-      spinNote.textContent = 'Prizes for this round are gone, but we\'d still love to hear your story.';
-      continueBtn.hidden = false;
-      continueBtn.textContent = 'Share your story anyway';
+      continueBtn.hidden = true;
+      spinTitle.textContent = 'This campaign is closed';
+      spinNote.textContent = 'All 150 spots have been filled. Thanks to everyone who recorded a video!';
       return;
     }
 
-    pendingSpin = { isTestimonialOnly: false, prizeIndex: data.prizeIndex, prize: data.prize, prizes: data.prizes };
+    pendingSpin = { prizeIndex: data.prizeIndex, prize: data.prize, prizes: data.prizes };
     SpinWheel.draw(canvas, data.prizes, 0);
     spinTitle.textContent = 'Spinning…';
     SpinWheel.spinTo(canvas, data.prizes, data.prizeIndex, () => {
@@ -274,11 +287,11 @@ document.getElementById('upload-form').addEventListener('submit', async (e) => {
         thumbnailBase64: thumb ? thumb.base64 : null,
         name, title, email,
         question: `Question ${selectedQuestion.id}: ${selectedQuestion.text}`,
-        prizeIndex: pendingSpin && !pendingSpin.isTestimonialOnly ? pendingSpin.prizeIndex : undefined,
+        prizeIndex: pendingSpin ? pendingSpin.prizeIndex : undefined,
       }),
     });
-    if (!res.ok) throw new Error('Submission failed. Please try again.');
     const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Submission failed. Please try again.');
 
     markAnswered(selectedQuestion.id);
     loadStatus();
@@ -300,13 +313,8 @@ function showSubmitSuccess(result) {
   const textEl = document.getElementById('submit-success-text');
   const noteEl = document.getElementById('submit-success-note');
   const continueBtn = document.getElementById('submit-success-continue-btn');
-  if (result.isTestimonialOnly) {
-    textEl.textContent = 'Your story is on the wall!';
-    noteEl.textContent = 'Prizes for this round are claimed, but we loved hearing from you.';
-  } else {
-    textEl.textContent = result.prize;
-    noteEl.textContent = 'Claimed! A confirmation email is on its way to you.';
-  }
+  textEl.textContent = result.prize;
+  noteEl.textContent = 'Claimed! A confirmation email is on its way to you.';
   continueBtn.textContent = getAnswered().length >= QUESTIONS.length
     ? 'See the wall'
     : 'Spin again & record another video';

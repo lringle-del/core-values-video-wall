@@ -1,10 +1,12 @@
-// As the pointer moves over the hero section, leave a trail of real staff
-// photos behind it, so the page keeps reminding you people are already
-// doing this. Scoped to the hero only — the rest of the page uses the
-// scroll-triggered pop-ups instead. Touch devices simply never fire enough
-// mousemove events for this to matter, so no gate is needed to skip them.
+// As the pointer moves over the hero section (but not over the spin-to-win
+// card itself, which needs a normal, uncluttered cursor), leave a trail of
+// real staff photos behind it, so the page keeps reminding you people are
+// already doing this. The rest of the page uses the scroll-triggered
+// pop-ups instead. Touch devices simply never fire enough mousemove events
+// for this to matter, so no gate is needed to skip them.
 (() => {
   const hero = document.querySelector('.hero');
+  const spinCardArea = document.querySelector('.hero-spin');
   if (!hero) return;
 
   const PHOTOS = [
@@ -21,6 +23,7 @@
   const MIN_INTERVAL = 100;
 
   hero.addEventListener('mousemove', (e) => {
+    if (spinCardArea && spinCardArea.contains(e.target)) return;
     const now = performance.now();
     if (now - lastSpawn < MIN_INTERVAL) return;
     if (lastX !== null) {

@@ -61,6 +61,15 @@ body {
 
 .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
+/* ---------------- countdown bar ---------------- */
+.countdown-bar {
+  background: var(--midnight); color: var(--vanilla); text-align: center;
+  padding: 9px 16px; font-family: var(--font-accent); font-weight: 700; font-size: 13.5px;
+  letter-spacing: .02em;
+}
+.countdown-bar strong { color: var(--sungold); }
+.countdown-bar.closing { background: var(--sunset); }
+
 /* ---------------- top bar ---------------- */
 .topbar { background: #fff; border-bottom: 1px solid var(--line); }
 .topbar-inner {
@@ -233,6 +242,12 @@ body {
 }
 .form-error { color: #b3261e; font-size: 13.5px; margin-top: 8px; font-family: var(--font-body); }
 
+/* ---------------- why we're doing this ---------------- */
+.why-section { background: var(--bg); padding: 48px 20px; text-align: center; }
+.why-wrap { max-width: 640px; margin: 0 auto; }
+.why-section .eyebrow { justify-content: center; }
+.why-body { font-size: 16px; color: var(--ink); line-height: 1.7; margin: 0; }
+
 /* ---------------- how-it-works strip ---------------- */
 .how-strip { background: var(--parchment); padding: 32px 0; border-bottom: 1px solid var(--line); }
 .how-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
@@ -246,10 +261,6 @@ body {
   border: 2px dashed var(--midnight); margin-bottom: 6px;
 }
 .how-icon svg { width: 24px; height: 24px; }
-.how-icon::after {
-  content: ''; position: absolute; top: -8px; right: -10px; width: 16px; height: 8px;
-  border-top: 2px dashed var(--sunset); border-radius: 50%; transform: rotate(-15deg);
-}
 .how-item:nth-child(2) .how-icon, .how-item:nth-child(4) .how-icon { transform: rotate(-4deg); }
 .how-item:nth-child(1) .how-icon, .how-item:nth-child(3) .how-icon { transform: rotate(3deg); }
 .how-heading {
