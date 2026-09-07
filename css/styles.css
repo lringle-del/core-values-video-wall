@@ -77,8 +77,10 @@ body {
   display: flex; align-items: center; justify-content: space-between;
 }
 .topbar-logo { height: 40px; width: auto; display: block; }
-.topbar-link { color: var(--midnight); font-weight: 600; font-size: 14px; text-decoration: none; font-family: var(--font-accent); }
+.topbar-nav { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+.topbar-link { color: var(--midnight); font-weight: 600; font-size: 13.5px; text-decoration: none; font-family: var(--font-accent); white-space: nowrap; }
 .topbar-link:hover { color: var(--sunset); }
+@media (max-width: 640px) { .topbar-nav { display: none; } }
 
 /* ---------------- hero ---------------- */
 .hero {
