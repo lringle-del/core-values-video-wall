@@ -119,7 +119,7 @@ function resetSpinCard() {
   reveal.hidden = true;
   spinBtn.hidden = false;
   spinBtn.disabled = false;
-  spinBtn.textContent = 'Spin now';
+  spinBtn.textContent = 'Spin now and record!';
   continueBtn.hidden = true;
   continueBtn.classList.remove('btn-huge');
 }
@@ -175,7 +175,7 @@ document.getElementById('spin-btn').addEventListener('click', async () => {
     });
   } catch {
     spinBtn.disabled = false;
-    spinBtn.textContent = 'Spin now';
+    spinBtn.textContent = 'Spin now and record!';
     spinNote.textContent = 'Something went wrong. Please try again.';
   }
 });
