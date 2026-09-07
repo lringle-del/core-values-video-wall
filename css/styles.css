@@ -240,6 +240,15 @@ body {
   0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(221,95,44,.5); }
   50% { transform: scale(1.03); box-shadow: 0 0 0 10px rgba(221,95,44,0); }
 }
+#spin-btn { animation: spin-btn-attention 2.6s ease-in-out infinite; }
+#spin-btn:hover, #spin-btn:disabled { animation: none; }
+@keyframes spin-btn-attention {
+  0%, 55%, 100% { transform: translateY(0) scale(1); box-shadow: 0 0 0 0 rgba(221,95,44,0); filter: brightness(1); }
+  60% { transform: translateY(-8px) scale(1.02); filter: brightness(1.08); }
+  65% { transform: translateY(0) scale(1); filter: brightness(1); }
+  70% { transform: translateY(-4px) scale(1.01); filter: brightness(1.05); }
+  75% { transform: translateY(0) scale(1); box-shadow: 0 0 0 12px rgba(221,95,44,0); filter: brightness(1); }
+}
 .form-error { color: #b3261e; font-size: 13.5px; margin-top: 8px; font-family: var(--font-body); }
 
 /* ---------------- why we're doing this ---------------- */
